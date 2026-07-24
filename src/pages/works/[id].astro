@@ -1,9 +1,8 @@
 ---
 import { getCollection, render } from "astro:content";
-// ایمپورت کردن Layout (مسیر را بر اساس ساختار پوشه‌های خود چک کنید)
 import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
 
-// تابع getStaticPaths برای ساختن مسیرهای داینامیک الزامی است
 export async function getStaticPaths() {
   const works = await getCollection("works");
 
@@ -13,19 +12,26 @@ export async function getStaticPaths() {
   }));
 }
 
-// دریافت داده‌ها از props
 const { work } = Astro.props;
 const { Content } = await render(work);
 
-// مقادیر پیش‌فرض (آرایه‌های خالی) برای جلوگیری از خطای مپ روی undefined
 const { coverImage, imageGallery = [], videoGallery = [] } = work.data;
+
+// ADD THIS: Helper function to fix the base path for videos
+const withBase = (path: string) => {
+  if (!path) return path;
+  // Grabs "/portfolio-minimal" from your astro.config.mjs
+  const base = import.meta.env.BASE_URL;
+  // Combines them and prevents double slashes (e.g., //videos)
+  return `${base}${path}`.replace(/\/\//g, "/");
+};
 ---
 
 <Layout title={`${work.data.title} | Neda Ranjbar`}>
   <article class="portfolio-container">
-    <!-- Hero Section -->
+    <!-- Hero Section stays the same -->
     <header class="hero-section">
-      <img src={coverImage} alt={work.data.title} class="hero-image" />
+      <Image src={coverImage} alt={work.data.title} class="hero-image" />
       <div class="hero-overlay">
         <h1 class="text-4xl font-bold mb-2">{work.data.title}</h1>
         {
@@ -45,20 +51,22 @@ const { coverImage, imageGallery = [], videoGallery = [] } = work.data;
       <h2 class="text-2xl font-semibold mb-6">Project Media</h2>
 
       <div class="bento-grid">
+        {/* Images still use Astro's <Image /> component directly */}
         {
           imageGallery.map((img) => (
             <div class={`media-card aspect-${img.aspect}`}>
-              <img src={img.src} alt={img.alt} loading="lazy" />
+              <Image src={img.src} alt={img.alt} loading="lazy" />
             </div>
           ))
         }
 
+        {/* Videos use the withBase() helper to fix GitHub Pages routing */}
         {
           videoGallery.map((vid) => (
             <div class={`media-card aspect-${vid.aspect}`}>
               <video
-                src={vid.src}
-                poster={vid.poster}
+                src={withBase(vid.src)}
+                poster={vid.poster ? withBase(vid.poster) : undefined}
                 controls
                 muted
                 loop

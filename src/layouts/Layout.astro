@@ -1,15 +1,25 @@
 ---
 import "../styles/global.css";
-// Import text content and static data
-import * as aboutData from "../data/about.md";
+import { Image } from "astro:assets";
+// 1. Import getEntry and render from astro:content
+import { getEntry, render } from "astro:content";
 
 interface Props {
   title: string;
 }
 const { title } = Astro.props;
 
-// Extract variables from Markdown file
-const { frontmatter, Content } = aboutData;
+// 2. Fetch the data through the Content Collections API
+// (This applies your schema, converting the string into an Image object)
+const aboutEntry = await getEntry("about", "about");
+
+if (!aboutEntry) {
+  throw new Error("Could not find about.md in the 'about' collection.");
+}
+
+// 3. Extract the frontmatter and the Markdown content component
+const frontmatter = aboutEntry.data;
+const { Content } = await render(aboutEntry);
 ---
 
 <!doctype html>
@@ -49,7 +59,7 @@ const { frontmatter, Content } = aboutData;
       <div class="flex flex-col md:flex-row gap-12 items-start mb-16">
         <div
           class="w-48 h-48 rounded-full overflow-hidden bg-gray-200 shrink-0">
-          <img
+          <Image
             src={frontmatter.profileImage}
             alt={frontmatter.name}
             class="w-full h-full object-cover"
