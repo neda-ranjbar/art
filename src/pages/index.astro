@@ -4,6 +4,9 @@ import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
 const works = await getCollection("works");
+
+// 1. Grab the base URL from your config ("/portfolio-minimal")
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout title="Neda Ranjbar - 2D Animator">
@@ -12,7 +15,8 @@ const works = await getCollection("works");
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
       {
         works.map((work) => (
-          <a href={`/works/${work.id}`} class="group block">
+          // 2. Inject the base path into the href
+          <a href={`${base}/works/${work.id}`} class="group block">
             <div class="overflow-hidden rounded-lg bg-gray-100 aspect-[4/5] md:aspect-square mb-4">
               <Image
                 src={work.data.coverImage}
