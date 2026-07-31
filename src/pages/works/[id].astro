@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
+import About from "../../components/About.astro";
 
 export async function getStaticPaths() {
   const works = await getCollection("works");
@@ -28,6 +29,9 @@ const withBase = (path: string) => {
 ---
 
 <Layout title={`${work.data.title} | Neda Ranjbar`}>
+  <!-- Compact About Section for sub-pages -->
+  <About variant="compact" />
+
   <article class="portfolio-container">
     <!-- Hero Section stays the same -->
     <header class="hero-section">

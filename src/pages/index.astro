@@ -2,14 +2,17 @@
 import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import About from "../components/About.astro";
 
 const works = await getCollection("works");
 
-// 1. Grab the base URL from your config ("/portfolio-minimal")
 const base = import.meta.env.BASE_URL;
 ---
 
 <Layout title="Neda Ranjbar - 2D Animator">
+  <!-- About Section (Full Version) -->
+  <About variant="full" />
+
   <!-- Work Grid Section -->
   <section id="work" class="py-8 md:py-12">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">

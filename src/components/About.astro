@@ -1,0 +1,83 @@
+---
+import { Image } from "astro:assets";
+import { getEntry, render } from "astro:content";
+
+// Define props, including a variant for different page types
+interface Props {
+  variant?: "full" | "compact";
+}
+const { variant = "full" } = Astro.props;
+
+// Fetch the 'about' content collection data
+const aboutEntry = await getEntry("about", "about");
+
+if (!aboutEntry) {
+  throw new Error("Could not find about.md in the 'about' collection.");
+}
+
+const { data: frontmatter } = aboutEntry;
+const { Content } = await render(aboutEntry);
+---
+
+<section id="about" class="max-w-5xl mx-auto px-6 py-16 md:py-24 border-b border-gray-100">
+  <div class="flex flex-col md:flex-row gap-12 items-start mb-12">
+    <div class="w-48 h-48 rounded-full overflow-hidden bg-gray-200 shrink-0">
+      <Image
+        src={frontmatter.profileImage}
+        alt={frontmatter.name}
+        class="w-full h-full object-cover"
+      />
+    </div>
+    <div>
+      <h2 class="text-3xl font-medium mb-2">{frontmatter.name}</h2>
+      <a
+        href={`mailto:${frontmatter.email}`}
+        class="text-gray-600 hover:text-black mb-6 inline-block"
+      >
+        {frontmatter.email}
+      </a>
+      <div class="text-gray-700 leading-relaxed max-w-2xl prose">
+        <Content />
+      </div>
+    </div>
+  </div>
+
+  <!-- Conditionally render the detailed sections for the 'full' variant -->
+  {variant === "full" && (
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-sm">
+      <!-- Work History -->
+      <div>
+        <h3 class="font-bold uppercase tracking-wider mb-6">Work History</h3>
+        <div class="space-y-6">
+          {
+            frontmatter.workHistory.map((job: any) => (
+              <div>
+                <h4 class="font-medium text-base">{job.company}</h4>
+                <p class="text-gray-500 mb-1">{job.period}</p>
+                <p class="text-gray-700">{job.role}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Clients -->
+      <div>
+        <h3 class="font-bold uppercase tracking-wider mb-6">Clients</h3>
+        <ul class="space-y-3 text-gray-700">
+          {frontmatter.clients.map((client: string) => <li>{client}</li>)}
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h3 class="font-bold uppercase tracking-wider mb-6">Socials</h3>
+        <ul class="space-y-3 text-gray-700">
+          <li>
+            Instagram: <a href={frontmatter.instagramUrl} class="hover:underline" target="_blank" rel="noopener noreferrer">{frontmatter.instagramHandle}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  )}
+</section>
