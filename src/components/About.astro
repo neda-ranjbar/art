@@ -19,7 +19,7 @@ const { data: frontmatter } = aboutEntry;
 const { Content } = await render(aboutEntry);
 ---
 
-<section id="about" class="max-w-5xl mx-auto px-6 py-16 md:py-24 border-b border-gray-100">
+<section id="about" class="max-w-5xl mx-auto px-6 py-16 md:py-24 border-b border-gray-100 scroll-mt-24">
   <div class="flex flex-col md:flex-row gap-12 items-start mb-12">
     <div class="w-48 h-48 rounded-full overflow-hidden bg-gray-200 shrink-0">
       <Image
@@ -76,6 +76,9 @@ const { Content } = await render(aboutEntry);
           <li>
             Instagram: <a href={frontmatter.instagramUrl} class="hover:underline" target="_blank" rel="noopener noreferrer">{frontmatter.instagramHandle}</a>
           </li>
+            {frontmatter.phone && (
+              <li>Phone: <a href={`tel:${frontmatter.phone}`} class="hover:underline" target="_blank" rel="noopener noreferrer">{frontmatter.phone}</a></li>
+            )}
         </ul>
       </div>
     </div>
