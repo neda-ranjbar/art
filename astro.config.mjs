@@ -9,5 +9,5 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   site: "https://mmdhasan-yazdanpanah.github.io",
-  base: "/portfolio-minimal",
+  base: "/art",
 });
