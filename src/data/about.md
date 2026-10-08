@@ -5,7 +5,7 @@ email: "ranjbar22@gmail.com"
 phone: "0098- 9137291832"
 instagramHandle: "@neda.ranjbar9"
 instagramUrl: "#"
-profileImage: "../assets/images/profile.webp"
+profileImage: "../assets/images/Portfolio Profile 02.jpg"
 workHistory:
   - company: "Hoorakhsh Studio"
     period: "Sep 2020 - Mar 2025"
