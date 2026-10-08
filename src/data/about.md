@@ -12,7 +12,7 @@ workHistory:
     role: "2D Animator"
   - company: "Kahkeshan Studio"
     period: "Jul 2025 - Sep 2025"
-    role: "2D Animator (freelance)"
+    role: "2D Animator - StoryBoard Artist (freelance)"
 clients:
   - "Hoorakhsh Studio"
   - "Kahkeshan Studio"
