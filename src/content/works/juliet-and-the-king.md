@@ -3,10 +3,10 @@ title: "Juliet & the King"
 description: "Feature film animation project."
 coverImage: "../../assets/images/LS_Default_FA_jpg_w1920_q75.webp"
 imageGallery:
-  - src: "../../assets/images/LS_Default_FA_jpg_w1920_q75.webp"
+  - src: "../../assets/images/Self-Awareness-Monster-01.jpg"
     aspect: "horizontal"
     alt: "Wide landscape view"
-  - src: "../../assets/images/NEJATEBAHAR2_jpg_w1920_q75.webp"
+  - src: "../../assets/images/Self-Awareness-Monster-02.jpg"
     aspect: "vertical"
 videoGallery:
   - src: "/videos/test.mp4"
