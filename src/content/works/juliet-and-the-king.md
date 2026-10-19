@@ -7,7 +7,8 @@ imageGallery:
     aspect: "horizontal"
   - src: "../../assets/images/Self-Awareness-Monster-02.jpg"
     aspect: "horizontal"
-     - src: "../../assets/images/Tenbin-01.jpg
+     - src: "../../assets/images/Tenbin-01.jpg"
+     -  aspect: "horizontal"
  - src: "../../assets/images/Tenbin-02.jpg"
     aspect: "horizontal"
     - src: "../../assets/images/animatic-01.jpg"
