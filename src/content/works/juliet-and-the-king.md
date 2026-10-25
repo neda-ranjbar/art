@@ -1,7 +1,7 @@
 ---
 title: "Story Boards"
 description: "Feature film animation project."
-coverImage: "../../assets/images/LS_Default_FA_jpg_w1920_q75.webp"
+coverImage: "../../assets/images/StoryBoard-Poster.jpg"
 imageGallery:
   - src: "../../assets/images/Self-Awareness-Monster-01.jpg"
     aspect: "horizontal"
