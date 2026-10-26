@@ -1,7 +1,7 @@
 ---
 title: "Juliet & The King"
 description: "Feature film animation project."
-coverImage: "public/videos/J&K_Poster.JPG"
+coverImage: "public/videos/JandK_Poster.jpg"
 videoGallery:
   - src: "public/videos/JK01-01.mp4"
     aspect: "horizontal"
