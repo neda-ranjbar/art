@@ -23,7 +23,7 @@ videoGallery:
     aspect: "horizontal"
   - src: "/videos/OM06.mp4"
     aspect: "horizontal"
-  - src: "/videos/OM07.mp4
+  - src: "/videos/OM07.mp4"
     aspect: "horizontal"
   - src: "/videos/OM08.mp4"
     aspect: "horizontal"
