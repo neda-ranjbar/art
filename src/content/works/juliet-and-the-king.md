@@ -48,6 +48,12 @@ imageGallery:
   - src: "../../assets/images/animatic-01.jpg"
     aspect: "horizontal"
     alt: "Wide landscape view"
+  - src: "../../assets/images/animatic-02.jpg"
+    aspect: "horizontal"
+    alt: "Wide landscape view"
+  - src: "../../assets/images/animatic-03.jpg"
+    aspect: "horizontal"
+    alt: "Wide landscape view"
     
 
 videoGallery:
