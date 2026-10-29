@@ -2,7 +2,6 @@
 title: "The Shrew Of Destiny"
 description: "Feature film animation project."
 coverImage: "../../assets/images/shrew-poster.jpg"
-videoGallery:
    
 ---
 
