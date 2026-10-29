@@ -54,7 +54,6 @@ imageGallery:
   - src: "../../assets/images/animatic-03.png"
     aspect: "horizontal"
     alt: "Wide landscape view"
-    
 
 videoGallery:
   - src: "/videos/Self-Awareness-StoryReel.MP4"
