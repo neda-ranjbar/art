@@ -1,6 +1,6 @@
 ---
 name: "Neda Ranjbar"
-role: "2D Animator"
+role: "2D Animator/Story Board Artist"
 email: "ranjbar22@gmail.com"
 phone: "0098- 9137291832"
 instagramHandle: "@neda.ranjbar9"
@@ -13,10 +13,15 @@ workHistory:
   - company: "Kahkeshan Studio"
     period: "Jul 2025 - Sep 2025"
     role: "2D Animator - StoryBoard Artist (freelance)"
+  - company: "Animatic Group"
+    period: "ُSep 2025 - Present"
+    role: "Lead 2D Animator (Part-time)"
+
 clients:
   - "Hoorakhsh Studio"
   - "Kahkeshan Studio"
-  - "Animatic team"
+  - "Animatic Group"
+  - "JODIVI Studio"
 ---
 
 Hi! I’m Neda Ranjbar, a 2D frame-by-frame animator and storyboard artist with professional experience since 2020. I’ve worked on feature films at Hoorakhsh Studio, as well as animation projects with Kahkeshan and JODIVI Studio.
