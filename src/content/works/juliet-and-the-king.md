@@ -39,9 +39,9 @@ imageGallery:
 
     **Duration**: 1.5 Months
 
-    **Deliverables**: Storyboard Thumbnails, Storyboard"
+    **Deliverables**: Storyboard Thumbnails, Storyboard
 
-    Worked as a Storyboard Artist on All Days in One Echo, an independent animated short film developed by a small creative team for festival submission. I was responsible for creating storyboard thumbnails and developing the visual sequence of the film.
+    Worked as a Storyboard Artist on All Days in One Echo, an independent animated short film developed by a small creative team for festival submission. I was responsible for creating storyboard thumbnails and developing the visual sequence of the film."
   - src: "../../assets/images/Monster01.png"
     aspect: "horizontal"
     alt: "Wide landscape view"
