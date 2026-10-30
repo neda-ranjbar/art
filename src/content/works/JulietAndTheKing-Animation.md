@@ -46,5 +46,9 @@ videoGallery:
    
 ---
 
-Detailed description about my role as a 2D Animator in Juliet & the King.
-We focused on frame-by-frame expressive movements...
+Project Information
+Project: Juliet and the King
+Studio: Hoorakhsh Studios
+Medium: 2D Frame-by-Frame Animation
+Software: Adobe Animate
+Roles: Rough Animator, Tie-Down Artist, Inbetweener
