@@ -1,6 +1,6 @@
 ---
 title: "Loving Reaper"
-description: "Feature film animation project."
+description: "Freelance 2D frame-by-frame animation and inbetweening for JODIVI Studio, Germany (2026)."
 coverImage: "../../assets/images/Loving-Reaper-Poster.JPG"
 videoGallery:
   - src: "/videos/LR-01-01.mp4"
@@ -37,5 +37,16 @@ videoGallery:
    
 ---
 
-Detailed description about my role as a 2D Animator in Juliet & the King.
-We focused on frame-by-frame expressive movements...
+**Project**: Loving Reaper
+
+**Studio**: JODIVI Studio
+
+**Location**: Germany
+
+**Duration**: January 2026 – May 2026
+
+**Employment**: Freelance
+
+**Roles**: 2D Frame-by-Frame Animator, Inbetweener
+
+Worked as a freelance 2D frame-by-frame animator and Inbetweener on the commissioned animated project Loving Reaper at JODIVI Studio, Germany, contributing to character animation and inbetweening throughout the production process.
