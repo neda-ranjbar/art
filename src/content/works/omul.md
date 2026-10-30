@@ -3,6 +3,8 @@ title: "The Boy At The Edge Of The World"
 description: "Feature film animation project."
 coverImage: "../../assets/images/The-boy-at-the-edge-of-the-world-Poster.jpg"
 videoGallery:
+  - src: "/videos/Omul-trailer.mp4"
+    aspect: "horizontal"
   - src: "/videos/OM01_01.mp4"
     aspect: "horizontal"
   - src: "/videos/OM01_02.gif"
