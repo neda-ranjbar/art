@@ -1,7 +1,7 @@
 ---
 title: "The Spirit Of The Forest"
 description: "Feature film animation project."
-coverImage: "../../assets/images/Spirit-Of-The-Forest-Poster.png"
+coverImage: "../../assets/images/Poster_Spirit_of_the_forest-edited.jpg"
 videoGallery:
   - src: "/videos/1_1.mov"
     aspect: "horizontal"
