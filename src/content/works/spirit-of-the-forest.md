@@ -1,6 +1,6 @@
 ---
 title: "The Spirit Of The Forest"
-description: "Feature film animation project."
+description: "An independent 2D frame-by-frame animated short film exploring the spirit and magic of nature."
 coverImage: "../../assets/images/Poster_Spirit_of_the_forest-edited.jpg"
 videoGallery:
   - src: "/videos/1_1.mov"
@@ -21,5 +21,4 @@ videoGallery:
    
 ---
 
-Detailed description about my role as a 2D Animator in Juliet & the King.
-We focused on frame-by-frame expressive movements...
+Created a frame-by-frame 2D animated short film as my Bachelor’s graduation project in Digital Animation. I handled the entire creative process, from concept development and storyboarding to character and background design, animation, and final visual production, with sound design by Pooneh Najafi.
