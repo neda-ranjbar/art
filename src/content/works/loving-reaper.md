@@ -1,6 +1,6 @@
 ---
 title: "Loving Reaper"
-description: "An emotional animated project exploring the delicate relationship between life, death, and compassion."
+description: "2D frame-by-frame animation at JODIVI Studio, contributing as a Animator and Inbetweener."
 coverImage: "../../assets/images/Loving-Reaper-Poster.JPG"
 videoGallery:
   - src: "/videos/LR-01-01.mp4"
