@@ -5,6 +5,9 @@ coverImage: "../../assets/images/JandK_Poster.jpg"
 videoGallery:
   - src: "/videos/JandK-trailer.mp4"
     aspect: "horizontal"
+    description: "Official Trailer – Juliet and the King
+
+    A glimpse into the film’s world, visual style, and animation."
   - src: "/videos/JK09-01.mp4"
     aspect: "horizontal"
   - src: "/videos/JK08-01.mp4"
