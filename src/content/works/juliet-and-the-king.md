@@ -1,6 +1,6 @@
 ---
 title: "Story Boards"
-description: "Feature film animation project."
+description: "Bringing stories to life, one frame at a time."
 coverImage: "../../assets/images/StoryBoardPoster.png"
 imageGallery:
   - src: "../../assets/images/AllDaysInOneEcho-01.png"
@@ -27,6 +27,21 @@ imageGallery:
   - src: "../../assets/images/llDaysInOneEcho-08.png"
     aspect: "horizontal"
     alt: "Wide landscape view"
+    description: "**Project Information**
+    
+    **Project**: All Days in One Echo
+
+    **Production**: Independent Animation Project
+
+    **Project Type**: Animated Short Film
+
+    **Role**: Storyboard Artist
+
+    **Duration**: 1.5 Months
+
+    **Deliverables**: Storyboard Thumbnails, Storyboard"
+
+    Worked as a Storyboard Artist on All Days in One Echo, an independent animated short film developed by a small creative team for festival submission. I was responsible for creating storyboard thumbnails and developing the visual sequence of the film.
   - src: "../../assets/images/Monster01.png"
     aspect: "horizontal"
     alt: "Wide landscape view"
@@ -61,5 +76,4 @@ videoGallery:
     poster: "/src/assets/Self-Awareness-StoryReel-Poster.png"
 ---
 
-Detailed description about my role as a 2D Animator in Juliet & the King.
-We focused on frame-by-frame expressive movements...
+A collection of storyboard and visual development projects across independent productions, personal animated films, and collaborative creative works. My experience includes developing storyboard thumbnails, visual sequences, and shot compositions for projects such as the Animatic Podcast, my personal animated short film, and the independent short film All Days in One Echo.
