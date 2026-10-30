@@ -1,11 +1,6 @@
 ---
 title: "Juliet & The King"
-description: "Project Information
-Project: Juliet and the King
-Studio: Hoorakhsh Studios
-Medium: 2D Frame-by-Frame Animation
-Software: Adobe Animate
-Roles: Rough Animator, Tie-Down Artist, Inbetweener"
+description: "2D frame-by-frame animation at Hoorakhsh Studios, contributing as a Rough Animator, Tie-Down Artist, and Inbetweener."
 coverImage: "../../assets/images/JandK_Poster.jpg"
 videoGallery:
   - src: "/videos/JandK-trailer.mp4"
@@ -47,8 +42,13 @@ videoGallery:
 ---
 
 Project Information
+
 Project: Juliet and the King
+
 Studio: Hoorakhsh Studios
+
 Medium: 2D Frame-by-Frame Animation
+
 Software: Adobe Animate
+
 Roles: Rough Animator, Tie-Down Artist, Inbetweener
