@@ -9,9 +9,17 @@ videoGallery:
     aspect: "horizontal"
   - src: "/videos/JK08-01.mp4"
     aspect: "horizontal"
-  - src: "/videos/JK010-01.mp4"
+  - src: "/videos/JK10-01-edited.mp4"
+    aspect: "horizontal"
+  - src: "/videos/JK07-01.mp4"
     aspect: "horizontal"
   - src: "/videos/JK06-01.mp4"
+    aspect: "horizontal"
+  - src: "/videos/JK11-01.mp4"
+    aspect: "horizontal"
+  - src: "/videos/JK12-01.mp4"
+    aspect: "horizontal"
+  - src: "/videos/JK13-01.mp4"
     aspect: "horizontal"
   - src: "/videos/JK01-01.mp4"
     aspect: "horizontal"
@@ -29,8 +37,7 @@ videoGallery:
     aspect: "horizontal"
   - src: "/videos/JK04-02.mp4"
     aspect: "horizontal"
-  - src: "/videos/JK07-01.mp4"
-    aspect: "horizontal"
+  
    
 ---
 
