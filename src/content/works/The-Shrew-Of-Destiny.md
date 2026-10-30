@@ -2,6 +2,19 @@
 title: "The Shrew Of Destiny"
 description: "Feature film animation project."
 coverImage: "../../assets/images/shrew-poster.jpg"
+videoGallery:
+  - src: "/videos/Shrew-trailer.mp4"
+    aspect: "horizontal"
+  - src: "/videos/shrew01.mp4"
+    aspect: "horizontal"
+  - src: "/videos/shrew02.mp4"
+    aspect: "horizontal"
+  - src: "/videos/shrew03.mp4"
+    aspect: "horizontal"
+  - src: "/videos/shrew04.mp4"
+    aspect: "horizontal"
+  - src: "/videos/shrew05.mov"
+    aspect: "horizontal"
    
 ---
 
