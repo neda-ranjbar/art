@@ -1,6 +1,6 @@
 ---
 title: "The Boy At The Edge Of The World"
-description: "Feature film animation project."
+description: "2D animation for a commissioned project from Poland"
 coverImage: "../../assets/images/The-boy-at-the-edge-of-the-world-Poster.jpg"
 videoGallery:
   - src: "/videos/Omul-trailer.mp4"
@@ -35,5 +35,14 @@ videoGallery:
    
 ---
 
-Detailed description about my role as a 2D Animator in Juliet & the King.
-We focused on frame-by-frame expressive movements...
+**Project**: The Boy at the Edge of the World
+
+**Production**: Commissioned project from Poland
+
+**Type**: 2D Animation
+
+**Roles**: Tie-Down Artist, Rough Animator
+
+Worked on the commissioned 2D animated short film The Boy at the Edge of the World for a production based in Poland.
+
+Initially working as a Tie-Down Artist, I later took on both Rough Animation and Tie-Down tasks, contributing to character animation and refinement throughout the production process.
