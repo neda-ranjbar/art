@@ -1,6 +1,11 @@
 ---
 title: "Juliet & The King"
-description: "Feature film animation project."
+description: "Project Information
+Project: Juliet and the King
+Studio: Hoorakhsh Studios
+Medium: 2D Frame-by-Frame Animation
+Software: Adobe Animate
+Roles: Rough Animator, Tie-Down Artist, Inbetweener"
 coverImage: "../../assets/images/JandK_Poster.jpg"
 videoGallery:
   - src: "/videos/JandK-trailer.mp4"
