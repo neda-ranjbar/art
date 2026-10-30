@@ -41,14 +41,17 @@ videoGallery:
    
 ---
 
-Project Information
 
-Project: Juliet and the King
+**Project:** Juliet and the King
 
-Studio: Hoorakhsh Studios
+**Studio:** Hoorakhsh Studios
 
-Medium: 2D Frame-by-Frame Animation
+**Medium**: 2D Frame-by-Frame Animation
 
-Software: Adobe Animate
+**Software**: Adobe Animate
 
-Roles: Rough Animator, Tie-Down Artist, Inbetweener
+**Roles:** Rough Animator, Tie-Down Artist, Inbetweener
+
+Worked on the 2D frame-by-frame animated film Juliet and the King at Hoorakhsh Studios, contributing to different stages of the animation production process.
+
+During my time on the project, I worked as an Inbetweener, Tie-Down Artist, and Rough Animator, gaining experience in character movement, animation refinement, and the production workflow using Adobe Animate.
