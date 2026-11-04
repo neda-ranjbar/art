@@ -7,29 +7,29 @@ const works = defineCollection({
     z.object({
       title: z.string(),
       description: z.string().optional(),
-
-      // Dedicated image for the home page preview
       coverImage: image(),
 
-      // Separated Image Gallery
       imageGallery: z
         .array(
           z.object({
-            src: image(), // 3. Change this one too
+            src: image(),
             aspect: z.enum(["square", "vertical", "horizontal"]),
             alt: z.string().optional().default("Gallery image"),
+            description: z.string().optional(),
+            order: z.number().optional(),
           }),
         )
         .optional()
         .default([]),
 
-      // Separated Video Gallery
       videoGallery: z
         .array(
           z.object({
             src: z.string(),
             aspect: z.enum(["square", "vertical", "horizontal"]),
-            poster: z.string().optional(), // Optional thumbnail for the video
+            poster: z.string().optional(),
+            description: z.string().optional(),
+            order: z.number().optional(),
           }),
         )
         .optional()
@@ -38,8 +38,7 @@ const works = defineCollection({
 });
 
 const about = defineCollection({
-  // Adjust the base to match where your about.md is located
-  loader: glob({ pattern: "**/*.md", base: "./src/data" }),
+  loader: glob({ pattern: "about.md", base: "./src/data" }),
   schema: ({ image }) =>
     z.object({
       name: z.string(),
@@ -48,9 +47,17 @@ const about = defineCollection({
       phone: z.string(),
       instagramHandle: z.string(),
       instagramUrl: z.string(),
-      // This is the critical part:
+      linkedInHandle: z.string(),
+      linkedInUrl: z.string(),
       profileImage: image(),
-      workHistory: z.array(z.any()),
+
+      workHistory: z.array(
+        z.object({
+          company: z.string(),
+          period: z.string(),
+          role: z.string(),
+        }),
+      ),
       clients: z.array(z.string()),
     }),
 });

@@ -15,20 +15,21 @@ const base = import.meta.env.BASE_URL;
 
   <!-- Work Grid Section -->
   <section id="work" class="py-8 md:py-12 scroll-mt-24">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
       {
         works.map((work) => (
-          // 2. Inject the base path into the href
           <a href={`${base}/works/${work.id}#work`} class="group block">
-            <div class="overflow-hidden rounded-lg bg-gray-100 aspect-[4/5] md:aspect-square mb-4">
+            <div class="overflow-hidden rounded-lg bg-gray-100 mb-4">
               <Image
                 src={work.data.coverImage}
                 alt={work.data.title}
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                class="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
               />
             </div>
             <h3 class="text-xl font-medium">{work.data.title}</h3>
-            <p class="text-gray-500">{work.data.description}</p>
+            {work.data.description && (
+              <p class="text-gray-500 mt-1">{work.data.description}</p>
+            )}
           </a>
         ))
       }

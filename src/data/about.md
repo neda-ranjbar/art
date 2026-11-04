@@ -16,7 +16,7 @@ workHistory:
     period: "Jul 2025 - Sep 2025"
     role: "2D Animator - StoryBoard Artist (freelance)"
   - company: "Animatic Group"
-    period: "ُSep 2025 - Present"
+    period: "Sep 2025 - Present"
     role: "Lead 2D Animator (Part-time)"
 
 clients:

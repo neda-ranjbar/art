@@ -27,21 +27,18 @@ imageGallery:
   - src: "../../assets/images/llDaysInOneEcho-08.png"
     aspect: "horizontal"
     alt: "Wide landscape view"
-    description: "**Project Information**
-    
-    **Project**: All Days in One Echo
+    description: |
+      ### Project Information
 
-    **Production**: Independent Animation Project
+      - **Project:** All Days in One Echo
+      - **Production:** Independent Animation Project
+      - **Project Type:** Animated Short Film
+      - **Role:** Storyboard Artist
+      - **Duration:** 1.5 Months
+      - **Deliverables:** Storyboard Thumbnails, Storyboard
 
-    **Project Type**: Animated Short Film
+      Worked as a Storyboard Artist on All Days in One Echo, an independent animated short film developed by a small creative team for festival submission. I was responsible for creating storyboard thumbnails and developing the visual sequence of the film.
 
-    **Role**: Storyboard Artist
-
-    **Duration**: 1.5 Months
-
-    **Deliverables**: Storyboard Thumbnails, Storyboard
-
-    Worked as a Storyboard Artist on All Days in One Echo, an independent animated short film developed by a small creative team for festival submission. I was responsible for creating storyboard thumbnails and developing the visual sequence of the film."
   - src: "../../assets/images/Monster01.png"
     aspect: "horizontal"
     alt: "Wide landscape view"

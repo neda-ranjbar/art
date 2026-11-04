@@ -29,7 +29,10 @@ const { Content } = await render(aboutEntry);
       />
     </div>
     <div>
-      <h2 class="text-3xl font-medium mb-2">{frontmatter.name}</h2>
+      <h2 class="text-3xl font-medium mb-1">{frontmatter.name}</h2>
+      {frontmatter.role && (
+        <p class="text-gray-500 font-medium mb-2">{frontmatter.role}</p>
+      )}
       <a
         href={`mailto:${frontmatter.email}`}
         class="text-gray-600 hover:text-black mb-6 inline-block"
@@ -50,7 +53,7 @@ const { Content } = await render(aboutEntry);
         <h3 class="font-bold uppercase tracking-wider mb-6">Work History</h3>
         <div class="space-y-6">
           {
-            frontmatter.workHistory.map((job: any) => (
+            frontmatter.workHistory && frontmatter.workHistory.map((job: any) => (
               <div>
                 <h4 class="font-medium text-base">{job.company}</h4>
                 <p class="text-gray-500 mb-1">{job.period}</p>
@@ -65,20 +68,53 @@ const { Content } = await render(aboutEntry);
       <div>
         <h3 class="font-bold uppercase tracking-wider mb-6">Clients</h3>
         <ul class="space-y-3 text-gray-700">
-          {frontmatter.clients.map((client: string) => <li>{client}</li>)}
+          {frontmatter.clients && frontmatter.clients.map((client: string) => (
+            <li>{client}</li>
+          ))}
         </ul>
       </div>
 
-      <!-- Contact -->
+      <!-- Contact / Socials -->
       <div>
         <h3 class="font-bold uppercase tracking-wider mb-6">Socials</h3>
         <ul class="space-y-3 text-gray-700">
-          <li>
-            Instagram: <a href={frontmatter.instagramUrl} class="hover:underline" target="_blank" rel="noopener noreferrer">{frontmatter.instagramHandle}</a>
-          </li>
-            {frontmatter.phone && (
-              <li>Phone: <a href={`tel:${frontmatter.phone}`} class="hover:underline" target="_blank" rel="noopener noreferrer">{frontmatter.phone}</a></li>
-            )}
+          {frontmatter.linkedInUrl && (
+            <li>
+              LinkedIn:{" "}
+              <a
+                href={frontmatter.linkedInUrl}
+                class="hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {frontmatter.linkedInHandle || "Profile"}
+              </a>
+            </li>
+          )}
+          {frontmatter.instagramUrl && (
+            <li>
+              Instagram:{" "}
+              <a
+                href={frontmatter.instagramUrl}
+                class="hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {frontmatter.instagramHandle || "Profile"}
+              </a>
+            </li>
+          )}
+          {frontmatter.phone && (
+            <li>
+              Phone:{" "}
+              <a
+                href={`tel:${frontmatter.phone.replace(/[^\d+]/g, "").replace(/^00/, "+")}`}
+                class="hover:underline"
+              >
+                {frontmatter.phone}
+              </a>
+            </li>
+          )}
         </ul>
       </div>
     </div>

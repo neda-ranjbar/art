@@ -3,6 +3,10 @@ import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import About from "../../components/About.astro";
+import { marked } from "marked";
+
+// Import PhotoSwipe core styles
+import "photoswipe/style.css";
 
 export async function getStaticPaths() {
   const works = await getCollection("works");
@@ -18,22 +22,59 @@ const { Content } = await render(work);
 
 const { coverImage, imageGallery = [], videoGallery = [] } = work.data;
 
-// ADD THIS: Helper function to fix the base path for videos
+// Configure marked
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+});
+
+// Helper function to fix the base path for videos (essential for GitHub Pages)
 const withBase = (path: string) => {
   if (!path) return path;
-  // Grabs "/portfolio-minimal" from your astro.config.mjs
   const base = import.meta.env.BASE_URL;
-  // Combines them and prevents double slashes (e.g., //videos)
   return `${base}${path}`.replace(/\/\//g, "/");
 };
+
+type MediaItem =
+  | {
+      type: "image";
+      src: any;
+      alt: string;
+      aspect?: string;
+      order?: number;
+      descriptionHtml?: string;
+    }
+  | {
+      type: "video";
+      src: string;
+      poster?: string;
+      aspect?: string;
+      order?: number;
+      descriptionHtml?: string;
+    };
+
+const combinedMedia: MediaItem[] = [
+  ...imageGallery.map((item: any) => ({
+    ...item,
+    type: "image" as const,
+    descriptionHtml: item.description
+      ? marked.parse(item.description)
+      : undefined,
+  })),
+  ...videoGallery.map((item: any) => ({
+    ...item,
+    type: "video" as const,
+    descriptionHtml: item.description
+      ? marked.parse(item.description)
+      : undefined,
+  })),
+].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 ---
 
 <Layout title={`${work.data.title} | Neda Ranjbar`}>
-  <!-- Compact About Section for sub-pages -->
   <About variant="compact" />
 
   <article class="portfolio-container scroll-mt-24" id="work">
-    <!-- Hero Section stays the same -->
     <header class="hero-section">
       <Image src={coverImage} alt={work.data.title} class="hero-image" />
       <div class="hero-overlay">
@@ -50,63 +91,295 @@ const withBase = (path: string) => {
       <Content />
     </div>
 
-    <!-- Combined or Separated Galleries -->
+    <!-- Project Media Gallery Grid -->
     <section class="gallery-section mt-12">
       <h2 class="text-2xl font-semibold mb-6">Project Media</h2>
 
-      <div class="bento-grid">
-        {/* Images still use Astro's <Image /> component directly */}
+      <div class="media-flow-grid" id="pswp-gallery">
         {
-          imageGallery.map((img) => (
-            <div class={`media-card aspect-${img.aspect}`}>
-              <Image src={img.src} alt={img.alt} loading="lazy" />
-            </div>
-          ))
-        }
-
-        {/* Videos use the withBase() helper to fix GitHub Pages routing */}
-        {
-          videoGallery.map((vid) => (
-            <div class={`media-card aspect-${vid.aspect}`}>
-              <video
-                src={withBase(vid.src)}
-                poster={vid.poster ? withBase(vid.poster) : undefined}
-                controls
-                muted
-                loop
-                playsinline
-              />
-            </div>
-          ))
+          combinedMedia.map((item, index) =>
+            item.type === "image" ? (
+              <figure
+                class={`media-figure ${item.aspect ? `aspect-${item.aspect}` : ""}`}>
+                <a
+                  href={item.src.src}
+                  data-pswp-width={item.src.width}
+                  data-pswp-height={item.src.height}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="media-card gallery-item"
+                  aria-label={`Open image ${index + 1} in gallery`}>
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    loading="lazy"
+                    class="media-content"
+                  />
+                  {item.descriptionHtml && (
+                    <div
+                      class="hidden-caption"
+                      style="display:none;"
+                      set:html={item.descriptionHtml}
+                    />
+                  )}
+                </a>
+                {item.descriptionHtml && (
+                  <figcaption
+                    class="card-caption prose prose-invert"
+                    set:html={item.descriptionHtml}
+                  />
+                )}
+              </figure>
+            ) : (
+              <figure
+                class={`media-figure ${item.aspect ? `aspect-${item.aspect}` : ""}`}>
+                <div class="media-card video-card">
+                  <video
+                    src={withBase(item.src)}
+                    poster={item.poster ? withBase(item.poster) : undefined}
+                    controls
+                    playsinline
+                    preload="metadata"
+                    class="media-content"
+                  />
+                  <button
+                    type="button"
+                    class="video-expand"
+                    data-pswp-video-src={withBase(item.src)}
+                    data-pswp-video-poster={
+                      item.poster ? withBase(item.poster) : ""
+                    }
+                    aria-label={`Open video ${index + 1} in gallery`}>
+                    ⛶
+                    {item.descriptionHtml && (
+                      <div
+                        class="hidden-caption"
+                        style="display:none;"
+                        set:html={item.descriptionHtml}
+                      />
+                    )}
+                  </button>
+                </div>
+                {item.descriptionHtml && (
+                  <figcaption
+                    class="card-caption prose prose-invert"
+                    set:html={item.descriptionHtml}
+                  />
+                )}
+              </figure>
+            ),
+          )
         }
       </div>
     </section>
   </article>
 </Layout>
 
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+
+  const galleryElement = document.querySelector("#pswp-gallery");
+
+  if (galleryElement) {
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: "#pswp-gallery",
+      children: "a.gallery-item, button.video-expand",
+      pswpModule: () => import("photoswipe"),
+
+      // Zoom & Pan settings
+      initialZoomLevel: "fit",
+      secondaryZoomLevel: 2,
+      maxZoomLevel: 3,
+      wheelToZoom: false,
+
+      // UI
+      showHideAnimationType: "fade",
+      counter: true,
+      zoom: true,
+      close: true,
+      arrowKeys: true,
+    });
+
+    // Custom parser to map items and attach caption HTML
+    lightbox.addFilter("itemData", (itemData, index) => {
+      const items = galleryElement.querySelectorAll<HTMLElement>(
+        "a.gallery-item, button.video-expand",
+      );
+      const element = items[index];
+
+      const captionEl = element?.querySelector(".hidden-caption");
+      const description = captionEl ? captionEl.innerHTML : "";
+
+      if (element && element.classList.contains("video-expand")) {
+        const videoSrc = element.getAttribute("data-pswp-video-src") || "";
+        const poster = element.getAttribute("data-pswp-video-poster") || "";
+        return {
+          ...itemData,
+          type: "video",
+          videoSrc,
+          poster,
+          description,
+        };
+      }
+
+      return {
+        ...itemData,
+        description,
+      };
+    });
+
+    // Video custom element rendering
+    lightbox.on("contentLoad", (e) => {
+      const { content } = e;
+      const data = content.data as Record<string, any>;
+
+      if (data.type === "video") {
+        e.preventDefault();
+
+        const container = document.createElement("div");
+        container.className = "pswp__video-container";
+
+        const video = document.createElement("video");
+        video.src = data.videoSrc;
+        if (data.poster) video.poster = data.poster;
+        video.controls = true;
+        video.playsInline = true;
+        video.preload = "auto";
+        video.className = "pswp__video-element";
+
+        const stopPropagation = (evt: Event) => evt.stopPropagation();
+        video.addEventListener("pointerdown", stopPropagation);
+        video.addEventListener("touchstart", stopPropagation, {
+          passive: true,
+        });
+        video.addEventListener("touchmove", stopPropagation, { passive: true });
+        video.addEventListener("mousedown", stopPropagation);
+
+        container.appendChild(video);
+        content.element = container;
+      }
+    });
+
+    // Lightbox UI: Custom caption with smooth scrolling and minimize toggle
+    lightbox.on("uiRegister", () => {
+      lightbox.pswp?.ui?.registerElement({
+        name: "custom-caption",
+        order: 9,
+        isButton: false,
+        appendTo: "root",
+        html: `
+          <div class="pswp__caption-header">
+            <span class="pswp__caption-title">Project Details</span>
+            <button type="button" class="pswp__caption-toggle" aria-label="Toggle details">
+              <span class="toggle-icon">−</span>
+            </button>
+          </div>
+          <div class="pswp__caption-content"></div>
+        `,
+        onInit: (el: HTMLElement) => {
+          const header = el.querySelector(
+            ".pswp__caption-header",
+          ) as HTMLElement | null;
+          const toggleBtn = el.querySelector(
+            ".pswp__caption-toggle",
+          ) as HTMLButtonElement | null;
+          const toggleIcon = el.querySelector(
+            ".toggle-icon",
+          ) as HTMLElement | null;
+          const contentEl = el.querySelector(
+            ".pswp__caption-content",
+          ) as HTMLElement | null;
+
+          // Prevent PhotoSwipe from intercepting mouse wheel and gestures inside caption
+          const stopScrollEvent = (e: Event) => {
+            e.stopPropagation();
+          };
+          el.addEventListener("wheel", stopScrollEvent, { passive: false });
+          el.addEventListener("touchmove", stopScrollEvent, { passive: false });
+          el.addEventListener("touchstart", stopScrollEvent, { passive: true });
+          el.addEventListener("pointerdown", stopScrollEvent);
+          el.addEventListener("mousedown", stopScrollEvent);
+
+          // Minimize / Expand Toggle
+          const toggleCaption = (e: Event) => {
+            e.stopPropagation();
+            const isCollapsed = el.classList.toggle("is-collapsed");
+            if (toggleIcon) {
+              toggleIcon.textContent = isCollapsed ? "+" : "−";
+            }
+          };
+
+          toggleBtn?.addEventListener("click", toggleCaption);
+          header?.addEventListener("click", (e: Event) => {
+            if (e.target !== toggleBtn) {
+              toggleCaption(e);
+            }
+          });
+
+          // Update caption when switching slides
+          lightbox.pswp?.on("change", () => {
+            const currSlide = lightbox.pswp?.currSlide;
+            const caption = (currSlide?.data as { description?: string })
+              ?.description;
+
+            if (caption && contentEl) {
+              contentEl.innerHTML = caption;
+              el.style.display = "flex";
+              contentEl.scrollTop = 0; // Return scroll to top on new slide
+            } else {
+              if (contentEl) contentEl.innerHTML = "";
+              el.style.display = "none";
+            }
+          });
+        },
+      });
+    });
+
+    // Pause all playing videos when sliding
+    lightbox.on("change", () => {
+      document
+        .querySelectorAll<HTMLVideoElement>(".pswp__video-container video")
+        .forEach((v) => {
+          v.pause();
+        });
+    });
+
+    // Pause and release memory/audio buffer when closing
+    lightbox.on("close", () => {
+      document
+        .querySelectorAll<HTMLVideoElement>(".pswp__video-container video")
+        .forEach((v) => {
+          v.pause();
+          v.removeAttribute("src");
+          v.load();
+        });
+    });
+
+    lightbox.init();
+  }
+</script>
+
 <style>
   /* --- Base Layout --- */
   .portfolio-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem 0; /* پدینگ کناری حذف شد تا با Layout اصلی هماهنگ شود */
+    padding: 2rem 0;
   }
 
-  /* --- Hero Image Formatting --- */
+  /* --- Hero / Cover Section --- */
   .hero-section {
     position: relative;
     width: 100%;
-    height: 60vh;
-    min-height: 400px;
     border-radius: 1rem;
     overflow: hidden;
     margin-bottom: 3rem;
   }
 
   .hero-image {
+    display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
   }
 
   .hero-overlay {
@@ -117,30 +390,38 @@ const withBase = (path: string) => {
     padding: 3rem 2rem 2rem;
     background: linear-gradient(
       to top,
-      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.4) 60%,
       rgba(0, 0, 0, 0) 100%
     );
     color: white;
   }
 
-  /* --- The Bento/Masonry Grid --- */
-  .bento-grid {
+  /* --- Strict-Order Media Grid --- */
+  .media-flow-grid {
     display: grid;
-    /* Base column width is 250px, adapts to screen size */
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    /* 'dense' is the magic word that fills empty gaps automatically */
-    grid-auto-flow: dense;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+    align-items: start;
+  }
+
+  .media-figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .media-card {
     border-radius: 0.75rem;
     overflow: hidden;
-    background: #f3f4f6; /* Placeholder color while loading */
+    background: #000;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     transition:
       transform 0.3s ease,
       box-shadow 0.3s ease;
+    display: block;
+    cursor: zoom-in;
   }
 
   .media-card:hover {
@@ -148,45 +429,218 @@ const withBase = (path: string) => {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   }
 
-  .media-card img,
-  .media-card video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Prevents stretching */
+  .media-content {
     display: block;
+    width: 100%;
+    height: auto;
   }
 
-  /* --- Aspect Ratio Logic (The Core UX) --- */
-
-  /* 1x1 Grid Space */
-  .aspect-square {
-    grid-column: span 1;
-    grid-row: span 1;
-    aspect-ratio: 1 / 1;
-  }
-
-  /* 2x1 Grid Space (Wide) */
+  /* Aspect ratios spanning */
   .aspect-horizontal {
-    grid-column: span 2;
-    grid-row: span 1;
-    aspect-ratio: 16 / 9; /* Standard widescreen */
+    grid-column: 1 / -1;
   }
 
-  /* 1x2 Grid Space (Tall) */
+  .aspect-square,
   .aspect-vertical {
     grid-column: span 1;
-    grid-row: span 2;
-    aspect-ratio: 9 / 16; /* Standard portrait/mobile */
   }
 
-  /* --- Responsive Adjustments --- */
-  @media (max-width: 768px) {
-    .bento-grid {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 1rem;
+  @media (max-width: 640px) {
+    .media-flow-grid {
+      grid-template-columns: 1fr;
     }
-    .aspect-horizontal {
-      grid-column: span 2;
+    .aspect-horizontal,
+    .aspect-square,
+    .aspect-vertical {
+      grid-column: span 1;
     }
+    .hero-overlay {
+      padding: 1.5rem 1rem 1rem;
+    }
+  }
+
+  /* Video Elements */
+  .video-card {
+    position: relative;
+    cursor: default;
+  }
+
+  .video-expand {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 1;
+    padding: 0.35rem 0.65rem;
+    border: 0;
+    border-radius: 0.4rem;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .video-expand:hover {
+    background: rgba(0, 0, 0, 1);
+  }
+
+  /* Page Grid Captions */
+  .card-caption {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* Lightbox Video */
+  :global(.pswp__video-container) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  :global(.pswp__video-element) {
+    max-width: 90vw;
+    max-height: 85vh;
+    width: auto;
+    height: auto;
+    pointer-events: auto;
+    outline: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 0.5rem;
+    background-color: #000;
+  }
+
+  /* --- Lightbox Custom Caption Box with Minimize --- */
+  :global(.pswp__custom-caption) {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(850px, calc(100% - 2.5rem));
+    max-height: 38vh;
+    display: flex;
+    flex-direction: column;
+    background: rgba(18, 18, 18, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+    border-radius: 0.85rem;
+    color: #f3f4f6;
+    z-index: 1005;
+    pointer-events: auto;
+    overflow: hidden;
+    transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Header bar with minimize toggle */
+  :global(.pswp__caption-header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1.1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  :global(.pswp__caption-title) {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #9ca3af;
+  }
+
+  :global(.pswp__caption-toggle) {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: background 0.15s ease;
+  }
+
+  :global(.pswp__caption-toggle:hover) {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  /* Scrollable Content Container */
+  :global(.pswp__caption-content) {
+    padding: 1rem 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Sleek modern scrollbar */
+  :global(.pswp__caption-content::-webkit-scrollbar) {
+    width: 6px;
+  }
+  :global(.pswp__caption-content::-webkit-scrollbar-track) {
+    background: transparent;
+  }
+  :global(.pswp__caption-content::-webkit-scrollbar-thumb) {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+  }
+  :global(.pswp__caption-content::-webkit-scrollbar-thumb:hover) {
+    background: rgba(255, 255, 255, 0.45);
+  }
+
+  /* Collapsed / Minimized state */
+  :global(.pswp__custom-caption.is-collapsed) {
+    max-height: 42px;
+  }
+  :global(.pswp__custom-caption.is-collapsed .pswp__caption-content) {
+    display: none;
+  }
+
+  /* Markdown elements styling inside caption box */
+  :global(.pswp__caption-content h3) {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  :global(.pswp__caption-content ul) {
+    margin: 0.4rem 0 0.8rem;
+    padding-left: 1.2rem;
+    list-style-type: disc;
+  }
+
+  :global(.pswp__caption-content li) {
+    margin-bottom: 0.25rem;
+  }
+
+  :global(.pswp__caption-content p) {
+    margin: 0.4rem 0;
+  }
+
+  /* Phone Safe Area Adjustments */
+  :global(.pswp__top-bar) {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  :global(.pswp) {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 </style>
