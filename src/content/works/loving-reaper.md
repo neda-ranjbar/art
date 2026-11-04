@@ -1,5 +1,6 @@
 ---
 title: "Loving Reaper"
+order: 1
 description: "2D frame-by-frame animation at JODIVI Studio, contributing as a Animator and Inbetweener."
 coverImage: "../../assets/images/Loving-Reaper-Poster.JPG"
 videoGallery:
@@ -33,8 +34,6 @@ videoGallery:
     aspect: "horizontal"
   - src: "/videos/LR14.mp4"
     aspect: "horizontal"
-
-   
 ---
 
 **Project**: Loving Reaper

@@ -4,7 +4,9 @@ import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import About from "../components/About.astro";
 
-const works = await getCollection("works");
+const works = (await getCollection("works")).sort(
+  (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999),
+);
 
 const base = import.meta.env.BASE_URL;
 ---

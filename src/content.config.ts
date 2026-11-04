@@ -8,6 +8,7 @@ const works = defineCollection({
       title: z.string(),
       description: z.string().optional(),
       coverImage: image(),
+      order: z.number().optional(), // <-- Added top-level project ordering
 
       imageGallery: z
         .array(
@@ -25,8 +26,8 @@ const works = defineCollection({
       videoGallery: z
         .array(
           z.object({
-            src: z.string().optional(),    // For local MP4s
-            embed: z.string().optional(),  // Paste raw <iframe> here
+            src: z.string().optional(),
+            embed: z.string().optional(),
             aspect: z.enum(["square", "vertical", "horizontal"]),
             poster: z.string().optional(),
             description: z.string().optional(),
