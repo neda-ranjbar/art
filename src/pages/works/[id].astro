@@ -22,13 +22,11 @@ const { Content } = await render(work);
 
 const { coverImage, imageGallery = [], videoGallery = [] } = work.data;
 
-// Configure marked
 marked.setOptions({
   gfm: true,
   breaks: true,
 });
 
-// Helper function to fix the base path for videos (essential for GitHub Pages)
 const withBase = (path: string) => {
   if (!path) return path;
   const base = import.meta.env.BASE_URL;
@@ -46,7 +44,9 @@ type MediaItem =
     }
   | {
       type: "video";
-      src: string;
+      videoKind: "local" | "embed";
+      src?: string;
+      embedHtml?: string;
       poster?: string;
       aspect?: string;
       order?: number;
@@ -57,16 +57,15 @@ const combinedMedia: MediaItem[] = [
   ...imageGallery.map((item: any) => ({
     ...item,
     type: "image" as const,
-    descriptionHtml: item.description
-      ? marked.parse(item.description)
-      : undefined,
+    descriptionHtml: item.description ? marked.parse(item.description) : undefined,
   })),
   ...videoGallery.map((item: any) => ({
     ...item,
     type: "video" as const,
-    descriptionHtml: item.description
-      ? marked.parse(item.description)
-      : undefined,
+    videoKind: item.embed ? ("embed" as const) : ("local" as const),
+    src: item.src ? withBase(item.src) : undefined,
+    embedHtml: item.embed,
+    descriptionHtml: item.description ? marked.parse(item.description) : undefined,
   })),
 ].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 ---
@@ -79,11 +78,7 @@ const combinedMedia: MediaItem[] = [
       <Image src={coverImage} alt={work.data.title} class="hero-image" />
       <div class="hero-overlay">
         <h1 class="text-4xl font-bold mb-2">{work.data.title}</h1>
-        {
-          work.data.description && (
-            <p class="text-lg opacity-90">{work.data.description}</p>
-          )
-        }
+        {work.data.description && <p class="text-lg opacity-90">{work.data.description}</p>}
       </div>
     </header>
 
@@ -99,8 +94,7 @@ const combinedMedia: MediaItem[] = [
         {
           combinedMedia.map((item, index) =>
             item.type === "image" ? (
-              <figure
-                class={`media-figure ${item.aspect ? `aspect-${item.aspect}` : ""}`}>
+              <figure class={`media-figure ${item.aspect ? `aspect-${item.aspect}` : ""}`}>
                 <a
                   href={item.src.src}
                   data-pswp-width={item.src.width}
@@ -109,65 +103,69 @@ const combinedMedia: MediaItem[] = [
                   rel="noreferrer"
                   class="media-card gallery-item"
                   aria-label={`Open image ${index + 1} in gallery`}>
-                  <Image
-                    src={item.src}
-                    alt={item.alt}
-                    loading="lazy"
-                    class="media-content"
-                  />
-                  {item.descriptionHtml && (
-                    <div
-                      class="hidden-caption"
-                      style="display:none;"
-                      set:html={item.descriptionHtml}
+                  <div
+                    class="image-wrapper"
+                    style={`aspect-ratio: ${item.src.width} / ${item.src.height};`}>
+                    <!-- Shimmer + Spinner Indicator -->
+                    <div class="image-loader" aria-hidden="true">
+                      <span class="spinner" />
+                    </div>
+
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      loading="lazy"
+                      decoding="async"
+                      class="media-content lazy-fade"
+                      onload="this.classList.add('is-loaded')"
                     />
+                  </div>
+
+                  {item.descriptionHtml && (
+                    <div class="hidden-caption" style="display:none;" set:html={item.descriptionHtml} />
                   )}
                 </a>
                 {item.descriptionHtml && (
-                  <figcaption
-                    class="card-caption prose prose-invert"
-                    set:html={item.descriptionHtml}
-                  />
+                  <figcaption class="card-caption prose prose-invert" set:html={item.descriptionHtml} />
                 )}
               </figure>
             ) : (
-              <figure
-                class={`media-figure ${item.aspect ? `aspect-${item.aspect}` : ""}`}>
+              <figure class={`media-figure ${item.aspect ? `aspect-${item.aspect}` : ""}`}>
                 <div class="media-card video-card">
-                  <video
-                    src={withBase(item.src)}
-                    poster={item.poster ? withBase(item.poster) : undefined}
-                    controls
-                    playsinline
-                    preload="metadata"
-                    class="media-content"
-                  />
+                  {item.videoKind === "embed" && item.embedHtml ? (
+                    <div class="iframe-embed-wrapper" set:html={item.embedHtml} />
+                  ) : (
+                    <video
+                      src={item.src}
+                      poster={item.poster ? withBase(item.poster) : undefined}
+                      controls
+                      playsinline
+                      preload="metadata"
+                      class="media-content"
+                    />
+                  )}
+
                   <button
                     type="button"
                     class="video-expand"
-                    data-pswp-video-src={withBase(item.src)}
-                    data-pswp-video-poster={
-                      item.poster ? withBase(item.poster) : ""
-                    }
+                    data-video-kind={item.videoKind}
+                    data-pswp-video-src={item.src || ""}
+                    data-pswp-video-poster={item.poster ? withBase(item.poster) : ""}
                     aria-label={`Open video ${index + 1} in gallery`}>
                     ⛶
+                    {item.videoKind === "embed" && item.embedHtml && (
+                      <div class="hidden-embed-template" style="display:none;" set:html={item.embedHtml} />
+                    )}
                     {item.descriptionHtml && (
-                      <div
-                        class="hidden-caption"
-                        style="display:none;"
-                        set:html={item.descriptionHtml}
-                      />
+                      <div class="hidden-caption" style="display:none;" set:html={item.descriptionHtml} />
                     )}
                   </button>
                 </div>
                 {item.descriptionHtml && (
-                  <figcaption
-                    class="card-caption prose prose-invert"
-                    set:html={item.descriptionHtml}
-                  />
+                  <figcaption class="card-caption prose prose-invert" set:html={item.descriptionHtml} />
                 )}
               </figure>
-            ),
+            )
           )
         }
       </div>
@@ -178,6 +176,21 @@ const combinedMedia: MediaItem[] = [
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
 
+  // Check if images are already cached/complete on mount
+  const checkCachedImages = () => {
+    document.querySelectorAll<HTMLImageElement>(".lazy-fade").forEach((img) => {
+      if (img.complete) {
+        img.classList.add("is-loaded");
+      } else {
+        img.addEventListener("load", () => img.classList.add("is-loaded"), { once: true });
+      }
+    });
+  };
+
+  // Run on initial page load and on Astro view-transitions swaps
+  checkCachedImages();
+  document.addEventListener("astro:page-load", checkCachedImages);
+
   const galleryElement = document.querySelector("#pswp-gallery");
 
   if (galleryElement) {
@@ -186,13 +199,11 @@ const combinedMedia: MediaItem[] = [
       children: "a.gallery-item, button.video-expand",
       pswpModule: () => import("photoswipe"),
 
-      // Zoom & Pan settings
       initialZoomLevel: "fit",
       secondaryZoomLevel: 2,
       maxZoomLevel: 3,
       wheelToZoom: false,
 
-      // UI
       showHideAnimationType: "fade",
       counter: true,
       zoom: true,
@@ -200,24 +211,27 @@ const combinedMedia: MediaItem[] = [
       arrowKeys: true,
     });
 
-    // Custom parser to map items and attach caption HTML
     lightbox.addFilter("itemData", (itemData, index) => {
-      const items = galleryElement.querySelectorAll<HTMLElement>(
-        "a.gallery-item, button.video-expand",
-      );
+      const items = galleryElement.querySelectorAll<HTMLElement>("a.gallery-item, button.video-expand");
       const element = items[index];
 
       const captionEl = element?.querySelector(".hidden-caption");
       const description = captionEl ? captionEl.innerHTML : "";
 
       if (element && element.classList.contains("video-expand")) {
+        const videoKind = element.getAttribute("data-video-kind") || "local";
         const videoSrc = element.getAttribute("data-pswp-video-src") || "";
         const poster = element.getAttribute("data-pswp-video-poster") || "";
+        const embedEl = element.querySelector(".hidden-embed-template");
+        const embedHtml = embedEl ? embedEl.innerHTML : "";
+
         return {
           ...itemData,
           type: "video",
+          videoKind,
           videoSrc,
           poster,
+          embedHtml,
           description,
         };
       }
@@ -228,7 +242,7 @@ const combinedMedia: MediaItem[] = [
       };
     });
 
-    // Video custom element rendering
+    // Handle Lightbox content rendering for local videos & raw iframes
     lightbox.on("contentLoad", (e) => {
       const { content } = e;
       const data = content.data as Record<string, any>;
@@ -239,23 +253,34 @@ const combinedMedia: MediaItem[] = [
         const container = document.createElement("div");
         container.className = "pswp__video-container";
 
-        const video = document.createElement("video");
-        video.src = data.videoSrc;
-        if (data.poster) video.poster = data.poster;
-        video.controls = true;
-        video.playsInline = true;
-        video.preload = "auto";
-        video.className = "pswp__video-element";
-
         const stopPropagation = (evt: Event) => evt.stopPropagation();
-        video.addEventListener("pointerdown", stopPropagation);
-        video.addEventListener("touchstart", stopPropagation, {
-          passive: true,
-        });
-        video.addEventListener("touchmove", stopPropagation, { passive: true });
-        video.addEventListener("mousedown", stopPropagation);
 
-        container.appendChild(video);
+        if (data.videoKind === "embed" && data.embedHtml) {
+          const iframeWrapper = document.createElement("div");
+          iframeWrapper.className = "pswp__iframe-container";
+          iframeWrapper.innerHTML = data.embedHtml;
+
+          iframeWrapper.addEventListener("pointerdown", stopPropagation);
+          iframeWrapper.addEventListener("touchstart", stopPropagation, { passive: true });
+
+          container.appendChild(iframeWrapper);
+        } else {
+          const video = document.createElement("video");
+          video.src = data.videoSrc;
+          if (data.poster) video.poster = data.poster;
+          video.controls = true;
+          video.playsInline = true;
+          video.preload = "auto";
+          video.className = "pswp__video-element";
+
+          video.addEventListener("pointerdown", stopPropagation);
+          video.addEventListener("touchstart", stopPropagation, { passive: true });
+          video.addEventListener("touchmove", stopPropagation, { passive: true });
+          video.addEventListener("mousedown", stopPropagation);
+
+          container.appendChild(video);
+        }
+
         content.element = container;
       }
     });
@@ -277,20 +302,11 @@ const combinedMedia: MediaItem[] = [
           <div class="pswp__caption-content"></div>
         `,
         onInit: (el: HTMLElement) => {
-          const header = el.querySelector(
-            ".pswp__caption-header",
-          ) as HTMLElement | null;
-          const toggleBtn = el.querySelector(
-            ".pswp__caption-toggle",
-          ) as HTMLButtonElement | null;
-          const toggleIcon = el.querySelector(
-            ".toggle-icon",
-          ) as HTMLElement | null;
-          const contentEl = el.querySelector(
-            ".pswp__caption-content",
-          ) as HTMLElement | null;
+          const header = el.querySelector(".pswp__caption-header") as HTMLElement | null;
+          const toggleBtn = el.querySelector(".pswp__caption-toggle") as HTMLButtonElement | null;
+          const toggleIcon = el.querySelector(".toggle-icon") as HTMLElement | null;
+          const contentEl = el.querySelector(".pswp__caption-content") as HTMLElement | null;
 
-          // Prevent PhotoSwipe from intercepting mouse wheel and gestures inside caption
           const stopScrollEvent = (e: Event) => {
             e.stopPropagation();
           };
@@ -300,7 +316,6 @@ const combinedMedia: MediaItem[] = [
           el.addEventListener("pointerdown", stopScrollEvent);
           el.addEventListener("mousedown", stopScrollEvent);
 
-          // Minimize / Expand Toggle
           const toggleCaption = (e: Event) => {
             e.stopPropagation();
             const isCollapsed = el.classList.toggle("is-collapsed");
@@ -316,16 +331,14 @@ const combinedMedia: MediaItem[] = [
             }
           });
 
-          // Update caption when switching slides
           lightbox.pswp?.on("change", () => {
             const currSlide = lightbox.pswp?.currSlide;
-            const caption = (currSlide?.data as { description?: string })
-              ?.description;
+            const caption = (currSlide?.data as { description?: string })?.description;
 
             if (caption && contentEl) {
               contentEl.innerHTML = caption;
               el.style.display = "flex";
-              contentEl.scrollTop = 0; // Return scroll to top on new slide
+              contentEl.scrollTop = 0;
             } else {
               if (contentEl) contentEl.innerHTML = "";
               el.style.display = "none";
@@ -335,24 +348,27 @@ const combinedMedia: MediaItem[] = [
       });
     });
 
-    // Pause all playing videos when sliding
+    // Pause videos and reload iframes when moving between slides
     lightbox.on("change", () => {
-      document
-        .querySelectorAll<HTMLVideoElement>(".pswp__video-container video")
-        .forEach((v) => {
-          v.pause();
-        });
+      document.querySelectorAll<HTMLVideoElement>(".pswp__video-container video").forEach((v) => {
+        v.pause();
+      });
+      document.querySelectorAll<HTMLIFrameElement>(".pswp__iframe-container iframe").forEach((f) => {
+        const currentSrc = f.src;
+        f.src = currentSrc;
+      });
     });
 
-    // Pause and release memory/audio buffer when closing
+    // Clean up videos and iframes on close
     lightbox.on("close", () => {
-      document
-        .querySelectorAll<HTMLVideoElement>(".pswp__video-container video")
-        .forEach((v) => {
-          v.pause();
-          v.removeAttribute("src");
-          v.load();
-        });
+      document.querySelectorAll<HTMLVideoElement>(".pswp__video-container video").forEach((v) => {
+        v.pause();
+        v.removeAttribute("src");
+        v.load();
+      });
+      document.querySelectorAll<HTMLIFrameElement>(".pswp__iframe-container iframe").forEach((f) => {
+        f.src = "";
+      });
     });
 
     lightbox.init();
@@ -367,7 +383,6 @@ const combinedMedia: MediaItem[] = [
     padding: 2rem 0;
   }
 
-  /* --- Hero / Cover Section --- */
   .hero-section {
     position: relative;
     width: 100%;
@@ -397,7 +412,7 @@ const combinedMedia: MediaItem[] = [
     color: white;
   }
 
-  /* --- Strict-Order Media Grid --- */
+  /* --- Media Grid --- */
   .media-flow-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -417,9 +432,7 @@ const combinedMedia: MediaItem[] = [
     overflow: hidden;
     background: #000;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    transition:
-      transform 0.3s ease,
-      box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: block;
     cursor: zoom-in;
   }
@@ -435,7 +448,6 @@ const combinedMedia: MediaItem[] = [
     height: auto;
   }
 
-  /* Aspect ratios spanning */
   .aspect-horizontal {
     grid-column: 1 / -1;
   }
@@ -459,17 +471,104 @@ const combinedMedia: MediaItem[] = [
     }
   }
 
-  /* Video Elements */
+  /* --- Progressive Image Skeleton & Spinner --- */
+  .image-wrapper {
+    position: relative;
+    width: 100%;
+    background-color: #1a1a1a;
+    overflow: hidden;
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.03) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite linear;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .image-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .spinner {
+    width: 28px;
+    height: 28px;
+    border: 2.5px solid rgba(255, 255, 255, 0.15);
+    border-top-color: rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .lazy-fade {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    position: relative;
+    z-index: 2;
+  }
+
+  .lazy-fade.is-loaded {
+    opacity: 1;
+  }
+
+  .image-wrapper:has(.lazy-fade.is-loaded) {
+    animation: none;
+    background: transparent;
+  }
+
+  .image-wrapper:has(.lazy-fade.is-loaded) .image-loader {
+    opacity: 0;
+  }
+
+  /* --- Video & Iframe Container --- */
   .video-card {
     position: relative;
     cursor: default;
+  }
+
+  .iframe-embed-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    background: #000;
+  }
+
+  .iframe-embed-wrapper :global(iframe) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 
   .video-expand {
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
-    z-index: 1;
+    z-index: 10;
     padding: 0.35rem 0.65rem;
     border: 0;
     border-radius: 0.4rem;
@@ -484,7 +583,6 @@ const combinedMedia: MediaItem[] = [
     background: rgba(0, 0, 0, 1);
   }
 
-  /* Page Grid Captions */
   .card-caption {
     font-size: 0.95rem;
     line-height: 1.6;
@@ -494,7 +592,7 @@ const combinedMedia: MediaItem[] = [
     border-left: 3px solid rgba(255, 255, 255, 0.3);
   }
 
-  /* Lightbox Video */
+  /* --- Lightbox Video & Iframe --- */
   :global(.pswp__video-container) {
     display: flex;
     align-items: center;
@@ -516,7 +614,24 @@ const combinedMedia: MediaItem[] = [
     background-color: #000;
   }
 
-  /* --- Lightbox Custom Caption Box with Minimize --- */
+  :global(.pswp__iframe-container) {
+    width: min(90vw, 1100px);
+    aspect-ratio: 16 / 9;
+    max-height: 85vh;
+    pointer-events: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: #000;
+  }
+
+  :global(.pswp__iframe-container iframe) {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* --- Lightbox Custom Caption Box --- */
   :global(.pswp__custom-caption) {
     position: absolute;
     bottom: 1.5rem;
@@ -539,7 +654,6 @@ const combinedMedia: MediaItem[] = [
     transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Header bar with minimize toggle */
   :global(.pswp__caption-header) {
     display: flex;
     align-items: center;
@@ -579,7 +693,6 @@ const combinedMedia: MediaItem[] = [
     background: rgba(255, 255, 255, 0.15);
   }
 
-  /* Scrollable Content Container */
   :global(.pswp__caption-content) {
     padding: 1rem 1.25rem;
     font-size: 0.95rem;
@@ -589,7 +702,6 @@ const combinedMedia: MediaItem[] = [
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Sleek modern scrollbar */
   :global(.pswp__caption-content::-webkit-scrollbar) {
     width: 6px;
   }
@@ -604,7 +716,6 @@ const combinedMedia: MediaItem[] = [
     background: rgba(255, 255, 255, 0.45);
   }
 
-  /* Collapsed / Minimized state */
   :global(.pswp__custom-caption.is-collapsed) {
     max-height: 42px;
   }
@@ -612,7 +723,6 @@ const combinedMedia: MediaItem[] = [
     display: none;
   }
 
-  /* Markdown elements styling inside caption box */
   :global(.pswp__caption-content h3) {
     margin: 0 0 0.5rem 0;
     font-size: 1.15rem;
@@ -634,7 +744,6 @@ const combinedMedia: MediaItem[] = [
     margin: 0.4rem 0;
   }
 
-  /* Phone Safe Area Adjustments */
   :global(.pswp__top-bar) {
     padding-top: env(safe-area-inset-top, 0px);
     padding-right: env(safe-area-inset-right, 0px);

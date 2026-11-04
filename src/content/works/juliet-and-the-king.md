@@ -71,6 +71,20 @@ videoGallery:
   - src: "/videos/Self-Awareness-StoryReel.MP4"
     aspect: "horizontal"
     poster: "/src/assets/Self-Awareness-StoryReel-Poster.png"
+
+  # Aparat iframe
+  - embed: |
+      <iframe src="https://www.aparat.com/video/video/embed/videohash/psn5l31/vt/frame" allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+    aspect: "horizontal"
+    description: |
+      ### Official Trailer – Aparat
+      - Embedded directly via Aparat iframe.
+
+  # YouTube iframe
+  - embed: |
+      <iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    aspect: "horizontal"
+    description: "Official Trailer on YouTube"
 ---
 
 A collection of storyboard and visual development projects across independent productions, personal animated films, and collaborative creative works. My experience includes developing storyboard thumbnails, visual sequences, and shot compositions for projects such as the Animatic Podcast, my personal animated short film, and the independent short film All Days in One Echo.

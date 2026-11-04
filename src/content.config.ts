@@ -25,7 +25,8 @@ const works = defineCollection({
       videoGallery: z
         .array(
           z.object({
-            src: z.string(),
+            src: z.string().optional(),    // For local MP4s
+            embed: z.string().optional(),  // Paste raw <iframe> here
             aspect: z.enum(["square", "vertical", "horizontal"]),
             poster: z.string().optional(),
             description: z.string().optional(),
