@@ -1,5 +1,6 @@
 ---
 title: "Juliet & The King"
+order: 3
 description: "2D frame-by-frame animation at Hoorakhsh Studios, contributing as a Rough Animator, Tie-Down Artist, and Inbetweener."
 coverImage: "../../assets/images/JandK_Poster.jpg"
 videoGallery:
