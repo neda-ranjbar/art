@@ -1,5 +1,6 @@
 ---
 title: "Story Boards"
+order: 1
 description: "Bringing stories to life, one frame at a time."
 coverImage: "../../assets/images/StoryBoardPoster.png"
 imageGallery:
