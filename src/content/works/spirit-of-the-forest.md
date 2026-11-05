@@ -1,5 +1,6 @@
 ---
 title: "The Spirit Of The Forest"
+order: 2
 description: "An independent 2D frame-by-frame animated short film exploring the spirit and magic of nature."
 coverImage: "../../assets/images/Poster_Spirit_of_the_forest-edited.jpg"
 videoGallery:
