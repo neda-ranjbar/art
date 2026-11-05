@@ -23,11 +23,14 @@ workHistory:
     role: "Lead 2D Animator (Part-time)"
     
 
-clients:
-  - "Hoorakhsh Studio"
-  - "Kahkeshan Studio"
-  - "Animatic Group"
-  - "JODIVI Studio"
+Education:
+  - "Associate Degree – Classical Animation
+Shariaty Technical and Vocational College
+Associate Degree in Classical Animation
+September 2018 – August 2020"
+  - " Bachelor’s Degree – Digital Animation
+Shariaty Technical and Vocational College
+Bachelor’s Degree in Digital Animation"
 ---
 
 Hi! I’m Neda Ranjbar, a 2D frame-by-frame animator and storyboard artist with professional experience since 2020. I’ve worked on feature films at Hoorakhsh Studio, as well as animation projects with Kahkeshan and JODIVI Studio.
