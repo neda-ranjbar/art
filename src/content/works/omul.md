@@ -1,5 +1,6 @@
 ---
 title: "The Boy At The Edge Of The World"
+order: 4
 description: "2D animation for a commissioned project from Poland"
 coverImage: "../../assets/images/The-boy-at-the-edge-of-the-world-Poster.jpg"
 videoGallery:
