@@ -1,6 +1,6 @@
 ---
 title: "Loving Reaper"
-order: 1
+order: 7
 description: "2D frame-by-frame animation at JODIVI Studio, contributing as a Animator and Inbetweener."
 coverImage: "../../assets/images/Loving-Reaper-Poster.JPG"
 videoGallery:
