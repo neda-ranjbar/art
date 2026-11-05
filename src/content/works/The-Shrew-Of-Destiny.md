@@ -1,5 +1,6 @@
 ---
 title: "The Shrew Of Destiny"
+order: 5
 description: "An animated feature film telling a charming story inspired by the world of nature and its small inhabitants."
 coverImage: "../../assets/images/shrew-poster.jpg"
 videoGallery:
