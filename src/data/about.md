@@ -15,9 +15,13 @@ workHistory:
   - company: "Kahkeshan Studio"
     period: "Jul 2025 - Sep 2025"
     role: "2D Animator - StoryBoard Artist (freelance)"
+  - company: "JODIVI Studio"
+    period: "Jan 2026 - May 2026"
+    role: "2D Animator (freelance)"
   - company: "Animatic Group"
     period: "Sep 2025 - Present"
     role: "Lead 2D Animator (Part-time)"
+    
 
 clients:
   - "Hoorakhsh Studio"
