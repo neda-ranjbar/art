@@ -23,7 +23,7 @@ imageGallery:
     aspect: "horizontal"
     alt: "Wide landscape view"
     
-    description:
+    description: |
       ### Project Information
 
       - **Project:** All Days in One Echo
