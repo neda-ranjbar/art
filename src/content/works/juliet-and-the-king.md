@@ -22,6 +22,7 @@ imageGallery:
   - src: "../../assets/images/llDaysInOneEcho-06.png"
     aspect: "horizontal"
     alt: "Wide landscape view"
+    
     description: |
       ### Project Information
 
